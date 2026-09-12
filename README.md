@@ -215,8 +215,8 @@ curl http://localhost:8000/users/me \
 
 ## 🌐 Deployment
 
-- **Live API:** _add your Render URL here once deployed_
-- **Live Swagger docs:** _add your Render URL + `/docs` here once deployed_
+- **Live API: https://bibliotheque-numerique-api.onrender.com
+- **Live Swagger docs: https://bibliotheque-numerique-api.onrender.com/docs
 
 > ⚠️ Hosted on Render's free tier — the service spins down after periods of inactivity, so the first request may take up to 60 seconds to respond while it wakes up. The database is hosted on [Neon](https://neon.tech), which scales to zero and wakes up automatically in under a second.
 
