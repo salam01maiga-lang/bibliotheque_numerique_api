@@ -49,6 +49,7 @@ async def post_livre(livre: schemas.LivreCreate, db: AsyncSession = Depends(get_
     isbn = livre.isbn,
     langue = livre.langue,
     nb_exemplaire = livre.nb_exemplaire,
+    nb_disponible = livre.nb_exemplaire,
     categorie_id = livre.categorie_id,
     imageCouverture = livre.imageCouverture,
     fichierPDF = livre.fichierPDF
@@ -82,7 +83,14 @@ async def put_livre(id: int, livre: schemas.LivreUpdate, db: AsyncSession = Depe
     if livre.langue is not None:
         livre_exist.langue = livre.langue
     if livre.nb_exemplaire is not None:
+        difference = livre.nb_exemplaire - livre_exist.nb_exemplaire
+        if livre_exist.nb_disponible + difference < 0:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Impossible de descendre sous le nombre d'exemplaires empruntés"
+            )
         livre_exist.nb_exemplaire = livre.nb_exemplaire
+        livre_exist.nb_disponible += difference
     if livre.categorie_id is not None:
         livre_exist.categorie_id = livre.categorie_id
     if livre.imageCouverture is not None:
