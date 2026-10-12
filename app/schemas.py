@@ -132,7 +132,7 @@ class ReservationResponse(BaseModel):
     id: int
     user_id: int
     livre_id: int
-    date_reservation: date
+    date_reservation: Optional[datetime] = None
     statut: str
 
     class Config:
@@ -151,7 +151,7 @@ class AvisCreate(AvisBase):
 class AvisResponse(AvisBase):
     id: int
     user_id: int
-    date_creation: date
+    date_creation: Optional[datetime] = None
 
     class Config:
         from_attributes = True
@@ -165,7 +165,7 @@ class FavorisResponse(BaseModel):
     id: int
     user_id: int
     livre_id: int
-    date_ajout: date
+    date_ajout: Optional[datetime] = None
 
     class Config:
         from_attributes = True
