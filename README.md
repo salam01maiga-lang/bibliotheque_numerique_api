@@ -219,7 +219,7 @@ curl http://localhost:8000/users/me \
 - **Live Swagger docs: https://bibliotheque-numerique-api.onrender.com/docs
 
 > ⚠️ Hosted on Render's free tier — the service spins down after periods of inactivity, so the first request may take up to 60 seconds to respond while it wakes up. The database is hosted on [Neon](https://neon.tech), which scales to zero and wakes up automatically in under a second.
-> ## 🧪 Try it live
+## 🧪 Try it live
 
 You can test every feature on the live Swagger docs with this shared demo account:
 
