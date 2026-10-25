@@ -219,6 +219,18 @@ curl http://localhost:8000/users/me \
 - **Live Swagger docs: https://bibliotheque-numerique-api.onrender.com/docs
 
 > ⚠️ Hosted on Render's free tier — the service spins down after periods of inactivity, so the first request may take up to 60 seconds to respond while it wakes up. The database is hosted on [Neon](https://neon.tech), which scales to zero and wakes up automatically in under a second.
+> ## 🧪 Try it live
+
+You can test every feature on the live Swagger docs with this shared demo account:
+
+- **Email** (use it in the `username` field): `demo.admin@example.com`
+- **Password**: `Admin@2026`
+
+1. Open the live docs and click **Authorize**
+2. Enter the credentials above and log in
+3. Try creating a category, an author and a book, then borrow and return it
+
+> ⚠️ This is a public demo account on a free tier: data may be reset at any time, so please don't enter anything sensitive.
 
 ## 👤 Author
 
