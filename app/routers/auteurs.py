@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends, status
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.dependencies import get_db, require_admin
-from app.models import Auteur, User
+from app.models import Auteur, User, Livre_Auteur
 from typing import List
 from app import schemas
 
@@ -38,6 +38,9 @@ async def delete_author(id: int, db: AsyncSession = Depends(get_db), current_use
     author = author.scalar_one_or_none()
     if not author:
         raise HTTPException(status_code= status.HTTP_404_NOT_FOUND, detail= "Auteur introuvable")
+    lien = await db.execute(select(Livre_Auteur).where(Livre_Auteur.auteur_id == id))
+    if lien.scalars().first():
+        raise HTTPException(status_code= status.HTTP_400_BAD_REQUEST, detail= "Impossible de supprimer : des livres sont lies a cet auteur")
     await db.delete(author)
     await db.commit()
     return {"message": "Auteur supprimer"}

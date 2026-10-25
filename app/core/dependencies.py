@@ -22,6 +22,8 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: AsyncSession
     user = result.scalar_one_or_none()
     if user is None:
         raise HTTPException(status_code= status.HTTP_404_NOT_FOUND, detail= "Utilisateur introuvable")
+    if user.est_actif is False:
+        raise HTTPException(status_code= status.HTTP_403_FORBIDDEN, detail= "Compte desactive")
     return user
 
 async def require_admin(get_current: User = Depends(get_current_user)):

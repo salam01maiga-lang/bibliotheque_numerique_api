@@ -17,6 +17,11 @@ async def profil_edit(user: schemas.UserUpdate, db: AsyncSession = Depends(get_d
     if user.nom is not None:
         current_user.nom = user.nom
     if user.email is not None:
+        email_pris = await db.execute(
+            select(User).where(User.email == user.email, User.id != current_user.id)
+        )
+        if email_pris.scalar_one_or_none():
+            raise HTTPException(status_code= status.HTTP_400_BAD_REQUEST, detail= "Email deja utilise")
         current_user.email = user.email
     await db.commit()
     await db.refresh(current_user)
@@ -27,7 +32,7 @@ async def display_users(db: AsyncSession = Depends(get_db), admin: User = Depend
    result = await db.execute(select(User).where(User.role != "admin"))
    return result.scalars().all()
 
-@router.put("/{id}/activer")
+@router.put("/{id}/activer", response_model= schemas.UserResponse)
 async def activer_desactiver_membre(id: int, db: AsyncSession = Depends(get_db), admin: User = Depends(require_admin)):
     membre = await db.execute(select(User).where(User.id == id))
     membre = membre.scalar_one_or_none()

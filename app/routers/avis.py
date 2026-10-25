@@ -14,6 +14,11 @@ async def faire_avis(avis: schemas.AvisCreate, db: AsyncSession = Depends(get_db
     livre = livre.scalar_one_or_none()
     if not livre:
         raise HTTPException(status_code= status.HTTP_404_NOT_FOUND, detail= "Livre introuvable")
+    avis_existant = await db.execute(
+        select(Avis).where(Avis.user_id == current_user.id, Avis.livre_id == avis.livre_id)
+    )
+    if avis_existant.scalars().first():
+        raise HTTPException(status_code= status.HTTP_400_BAD_REQUEST, detail= "Vous avez deja donne un avis sur ce livre")
     new_avis = Avis(
         user_id = current_user.id,
         livre_id = avis.livre_id,

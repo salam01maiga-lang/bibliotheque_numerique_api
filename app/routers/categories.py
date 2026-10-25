@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends, status
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.dependencies import get_db, require_admin
-from app.models import Categorie, User
+from app.models import Categorie, User, Livre
 from typing import List
 from app import schemas
 
@@ -37,6 +37,10 @@ async def delete(id: int, db: AsyncSession = Depends(get_db), current_user: User
     categorie = categorie.scalar_one_or_none()
     if not categorie:
         raise HTTPException(status_code= status.HTTP_404_NOT_FOUND, detail= "categorie introuvable")
+    livre_categorie = await db.execute(select(Livre).where(Livre.categorie_id == id))
+    livre_categorie = livre_categorie.scalars().first()
+    if livre_categorie:
+        raise HTTPException(status_code= status.HTTP_400_BAD_REQUEST, detail= "Impossible de supprimer")
     await db.delete(categorie)
     await db.commit()
     return {"message": "Categorie supprimer"}

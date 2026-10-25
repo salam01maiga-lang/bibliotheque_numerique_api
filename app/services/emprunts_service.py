@@ -11,7 +11,7 @@ async def activer_reservation(db: AsyncSession, livre_id: int):
         )
         .order_by(Reservation.date_reservation)
     )
-    reservation = reservation.scalar_one_or_none()
+    reservation = reservation.scalars().first()
     if reservation:
         reservation.statut = "confirmee"
         await db.commit()

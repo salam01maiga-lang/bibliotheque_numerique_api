@@ -16,6 +16,15 @@ async def emprunter(emprunt: schemas.EmpruntCreate, db: AsyncSession = Depends(g
     livre = livre.scalar_one_or_none()
     if not livre:
         raise HTTPException(status_code= status.HTTP_404_NOT_FOUND, detail= "Livre introuvable")
+    deja_emprunte = await db.execute(
+        select(Emprunt).where(
+            Emprunt.user_id == current_user.id,
+            Emprunt.livre_id == emprunt.livre_id,
+            Emprunt.statut == "en_cours"
+        )
+    )
+    if deja_emprunte.scalars().first():
+        raise HTTPException(status_code= status.HTTP_400_BAD_REQUEST, detail= "Vous avez deja emprunte ce livre")
     if livre.nb_disponible == 0:
         raise HTTPException(status_code= status.HTTP_400_BAD_REQUEST, detail= "Livre indisponible")
     livre.nb_disponible -= 1

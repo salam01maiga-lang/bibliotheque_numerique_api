@@ -36,6 +36,8 @@ async def login(user: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = 
         raise HTTPException(status_code= status.HTTP_401_UNAUTHORIZED, detail= "email incorrect")
     if not security.verifier_hash(user.password, user_existant.mot_de_passe):
         raise HTTPException(status_code= status.HTTP_401_UNAUTHORIZED, detail= "mot de passe incorrect")
+    if user_existant.est_actif is False:
+        raise HTTPException(status_code= status.HTTP_403_FORBIDDEN, detail = "Compte desactive")
     tokenData = security.creer_access_token(data={
         "user_id": user_existant.id,
         "role": user_existant.role

@@ -10,6 +10,10 @@ router = APIRouter(prefix= "/favoris", tags= ["favoris"])
 
 @router.post("/", response_model= schemas.FavorisResponse)
 async def post_favoris(favoris: schemas.FavorisCreate, db: AsyncSession = Depends(get_db), current_user: User = Depends(get_current_user)):
+    livre_exist = await db.execute(select(Livre).where(Livre.id == favoris.livre_id))
+    livre_exist = livre_exist.scalar_one_or_none()
+    if not livre_exist:
+        raise HTTPException(status_code= status.HTTP_404_NOT_FOUND, detail= "livre introuvable")
     favoris_exist = await db.execute(select(Favoris).where(
         favoris.livre_id == Favoris.livre_id,
         Favoris.user_id == current_user.id))

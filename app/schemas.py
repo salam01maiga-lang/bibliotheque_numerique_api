@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import datetime, date
 from typing import Optional, List
 
@@ -146,7 +146,7 @@ class AvisBase(BaseModel):
     commentaire: str
 
 class AvisCreate(AvisBase):
-    pass 
+    note: int = Field(ge=1, le=5)
 
 class AvisResponse(AvisBase):
     id: int
